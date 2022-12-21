@@ -1,11 +1,13 @@
 package com.arajdianaltaf.favdish.view.activities
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.arajdianaltaf.favdish.R
 import com.arajdianaltaf.favdish.databinding.ActivityAddUpdateDishBinding
+import com.arajdianaltaf.favdish.databinding.DialogCustomImageSelectionBinding
 
 class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -31,12 +33,30 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun customImageSelectionDialog() {
+        val dialog = Dialog(this)
+        val binding: DialogCustomImageSelectionBinding = DialogCustomImageSelectionBinding.inflate(layoutInflater)
+
+        dialog.setContentView(binding.root)
+
+        binding.tvCamera.setOnClickListener {
+            Toast.makeText(this, "Camera is Clicked", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        binding.tvGallery.setOnClickListener {
+            Toast.makeText(this, "Gallery is clicked", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     override fun onClick(v: View?) {
         if(v != null){
             when (v.id) {
                 R.id.iv_add_dish_image -> {
-                    Toast.makeText(this, "You have clicked the ImageView", Toast.LENGTH_SHORT).show()
-                    return
+                    customImageSelectionDialog()
                 }
             }
         }
