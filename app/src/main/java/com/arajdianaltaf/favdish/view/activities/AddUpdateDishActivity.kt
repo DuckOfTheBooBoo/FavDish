@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -28,14 +30,21 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.UUID
 
 class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var myBinding: ActivityAddUpdateDishBinding
+    private var myImagePath: String = ""
 
     companion object {
         private const val CAMERA = 1
         private const val GALLERY = 2
+        private const val IMAGE_DIR = "FavDishImages"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,6 +137,26 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun saveImageToInternalStorage(bitmap: Bitmap): String {
+        val wrapper = ContextWrapper(applicationContext)
+
+        var file = wrapper.getDir(IMAGE_DIR, Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return file.absolutePath
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -143,6 +172,9 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
                         .load(thumbnail)
                         .centerCrop()
                         .into(myBinding.ivDishImage)
+
+                    myImagePath = saveImageToInternalStorage(thumbnail)
+                    Log.i("ImagePath", myImagePath)
 
 //                    Set icon to Edit
                     myBinding.ivAddDishImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_edit_icon))
