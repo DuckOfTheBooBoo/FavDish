@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import com.arajdianaltaf.favdish.R
 import com.arajdianaltaf.favdish.databinding.ActivityAddUpdateDishBinding
 import com.arajdianaltaf.favdish.databinding.DialogCustomImageSelectionBinding
+import com.bumptech.glide.Glide
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -136,7 +137,12 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
             if (requestCode == CAMERA) {
                 data?.extras?.let {
                     val thumbnail: Bitmap = data.extras!!.get("data") as Bitmap
-                    myBinding.ivDishImage.setImageBitmap(thumbnail)
+//                    myBinding.ivDishImage.setImageBitmap(thumbnail)
+
+                    Glide.with(this)
+                        .load(thumbnail)
+                        .centerCrop()
+                        .into(myBinding.ivDishImage)
 
 //                    Set icon to Edit
                     myBinding.ivAddDishImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_edit_icon))
@@ -149,7 +155,13 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 //                    Get image uri
                     val selectedPhotoUri = data.data
 
-                    myBinding.ivDishImage.setImageURI(selectedPhotoUri)
+//                    myBinding.ivDishImage.setImageURI(selectedPhotoUri)
+
+                    Glide.with(this)
+                        .load(selectedPhotoUri)
+                        .centerCrop()
+                        .into(myBinding.ivDishImage)
+
                     //                    Set icon to Edit
                     myBinding.ivAddDishImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_edit_icon))
 
