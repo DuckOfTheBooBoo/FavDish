@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -33,6 +34,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin.module'
+    }
 }
 
 dependencies {
@@ -49,6 +53,9 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    def room_version = '2.2.6'
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room_compiler:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
