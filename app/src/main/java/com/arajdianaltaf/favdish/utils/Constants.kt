@@ -1,5 +1,8 @@
 package com.arajdianaltaf.favdish.utils
 
+import java.util.*
+import kotlin.collections.ArrayList
+
 object Constants{
     const val DISH_TYPE: String = "DishType"
     const val DISH_CATEGORY: String = "DishCategory"
@@ -8,14 +11,14 @@ object Constants{
     fun dishTypes(): ArrayList<String>{
         val list = ArrayList<String>()
 
-        list.add("breakfast")
-        list.add("lunch")
-        list.add("snacks")
-        list.add("dinner")
-        list.add("salad")
-        list.add("side dish")
-        list.add("dessert")
-        list.add("other")
+        list.add("Breakfast")
+        list.add("Lunch")
+        list.add("Snacks")
+        list.add("Dinner")
+        list.add("Salad")
+        list.add("Side Dish")
+        list.add("Dessert")
+        list.add("Other")
 
         return list
     }

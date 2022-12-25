@@ -16,8 +16,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -67,11 +68,9 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(myBinding.root)
 
         setupActionBar()
+        dropdownMenu()
 
         myBinding.ivAddDishImage.setOnClickListener(this)
-        myBinding.etType.setOnClickListener(this)
-        myBinding.etCategory.setOnClickListener(this)
-        myBinding.etCookingTime.setOnClickListener(this)
     }
 
     private fun setupActionBar() {
@@ -264,19 +263,19 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
             }.show()
     }
 
-    private fun customItemListDialog(title: String, itemsList: List<String>, selection: String) {
-        val customListDialog = Dialog(this)
+    private fun dropdownMenu(){
 
-        val binding: DialogCustomListBinding = DialogCustomListBinding.inflate(layoutInflater)
+        val itemTypes = Constants.dishTypes()
+        val itemCategories = Constants.dishCategories()
+        val itemCookingTimes = Constants.dishCookTime()
 
-        customListDialog.setContentView(binding.root)
-        binding.tvTitle.text = title
-        binding.rvList.layoutManager = LinearLayoutManager(this)
+        val typesAdapter = ArrayAdapter(this, R.layout.dropdown_item, itemTypes)
+        val categoriesAdapter = ArrayAdapter(this, R.layout.dropdown_item, itemCategories)
+        val cookingTimesAdapter = ArrayAdapter(this, R.layout.dropdown_item, itemCookingTimes)
 
-        val adapter = CustomListItemAdapter(this, itemsList, selection)
-        binding.rvList.adapter = adapter
-        customListDialog.show()
-
+        myBinding.actvType.setAdapter(typesAdapter)
+        myBinding.actvCategory.setAdapter(categoriesAdapter)
+        myBinding.actvCookingTime.setAdapter(cookingTimesAdapter)
     }
 
     override fun onClick(v: View?) {
@@ -284,36 +283,6 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
             when (v.id) {
                 R.id.iv_add_dish_image -> {
                     customImageSelectionDialog()
-                }
-
-                R.id.et_type -> {
-                    customItemListDialog(
-                        resources.getString(R.string.title_select_dish_type),
-                        Constants.dishTypes(),
-                        Constants.DISH_TYPE
-                    )
-                    
-                    return
-                }
-
-                R.id.et_category -> {
-                    customItemListDialog(
-                        resources.getString(R.string.title_select_dish_category),
-                        Constants.dishCategories(),
-                        Constants.DISH_CATEGORY
-                        )
-
-                    return
-                }
-
-                R.id.et_cooking_time -> {
-                    customItemListDialog(
-                        resources.getString(R.string.title_select_dish_cooking_time),
-                        Constants.dishCookTime(),
-                        Constants.DISH_COOKING_TIME
-                    )
-
-                    return
                 }
             }
         }
