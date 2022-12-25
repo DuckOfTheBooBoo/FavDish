@@ -16,13 +16,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.arajdianaltaf.favdish.R
 import com.arajdianaltaf.favdish.databinding.ActivityAddUpdateDishBinding
 import com.arajdianaltaf.favdish.databinding.DialogCustomImageSelectionBinding
+import com.arajdianaltaf.favdish.databinding.DialogCustomListBinding
+import com.arajdianaltaf.favdish.utils.Constants
+import com.arajdianaltaf.favdish.view.adapters.CustomListItemAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -64,6 +69,9 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         setupActionBar()
 
         myBinding.ivAddDishImage.setOnClickListener(this)
+        myBinding.etType.setOnClickListener(this)
+        myBinding.etCategory.setOnClickListener(this)
+        myBinding.etCookingTime.setOnClickListener(this)
     }
 
     private fun setupActionBar() {
@@ -256,11 +264,56 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
             }.show()
     }
 
+    private fun customItemListDialog(title: String, itemsList: List<String>, selection: String) {
+        val customListDialog = Dialog(this)
+
+        val binding: DialogCustomListBinding = DialogCustomListBinding.inflate(layoutInflater)
+
+        customListDialog.setContentView(binding.root)
+        binding.tvTitle.text = title
+        binding.rvList.layoutManager = LinearLayoutManager(this)
+
+        val adapter = CustomListItemAdapter(this, itemsList, selection)
+        binding.rvList.adapter = adapter
+        customListDialog.show()
+
+    }
+
     override fun onClick(v: View?) {
         if(v != null){
             when (v.id) {
                 R.id.iv_add_dish_image -> {
                     customImageSelectionDialog()
+                }
+
+                R.id.et_type -> {
+                    customItemListDialog(
+                        resources.getString(R.string.title_select_dish_type),
+                        Constants.dishTypes(),
+                        Constants.DISH_TYPE
+                    )
+                    
+                    return
+                }
+
+                R.id.et_category -> {
+                    customItemListDialog(
+                        resources.getString(R.string.title_select_dish_category),
+                        Constants.dishCategories(),
+                        Constants.DISH_CATEGORY
+                        )
+
+                    return
+                }
+
+                R.id.et_cooking_time -> {
+                    customItemListDialog(
+                        resources.getString(R.string.title_select_dish_cooking_time),
+                        Constants.dishCookTime(),
+                        Constants.DISH_COOKING_TIME
+                    )
+
+                    return
                 }
             }
         }
