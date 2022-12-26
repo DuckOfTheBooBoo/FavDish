@@ -9,6 +9,7 @@
 
 
     <application
+        android:name=".application.FavDishApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,7 +23,7 @@
             android:name=".view.activities.AddUpdateDishActivity"
             android:label="Add Dish"
             android:theme="@style/Theme.FavDish.NoActionBar"
-            android:configChanges="orientation"></activity>
+            android:configChanges="orientation" />
         <activity
             android:name=".view.activities.SplashActivity"
             android:exported="true"
