@@ -8,17 +8,19 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.arajdianaltaf.favdish.R
 import com.arajdianaltaf.favdish.application.FavDishApplication
 import com.arajdianaltaf.favdish.databinding.FragmentAllDishesBinding
 import com.arajdianaltaf.favdish.view.activities.AddUpdateDishActivity
+import com.arajdianaltaf.favdish.view.adapters.FavDishAdapter
 import com.arajdianaltaf.favdish.viewmodel.FavDishViewModel
 import com.arajdianaltaf.favdish.viewmodel.FavDishViewModelFactory
 import com.arajdianaltaf.favdish.viewmodel.HomeViewModel
 
 class AllDishesFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var myBinding: FragmentAllDishesBinding
     private val myFavDishViewModel: FavDishViewModel by viewModels {
         FavDishViewModelFactory(
             (
@@ -41,17 +43,9 @@ class AllDishesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        _binding = FragmentAllDishesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        myBinding = FragmentAllDishesBinding.inflate(inflater, container, false)
+        return myBinding.root
     }
 
     override fun onDestroyView() {
@@ -62,10 +56,23 @@ class AllDishesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        myBinding.rvDishesList.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val favDishAdapter = FavDishAdapter(this@AllDishesFragment)
+
+        myBinding.rvDishesList.adapter = favDishAdapter
+
         myFavDishViewModel.allDishesList.observe(viewLifecycleOwner) {
             dishes -> dishes.let {
-                for (item in it) {
-                    Log.i("Dish Title", "${item.id} :: ${item.title}")
+                if (it.isNotEmpty()) {
+
+                    myBinding.rvDishesList.visibility = View.VISIBLE
+                    myBinding.tvNoDishesAddedYet.visibility = View.GONE
+
+                    favDishAdapter.dishesList(it)
+                } else {
+
+                    myBinding.rvDishesList.visibility = View.GONE
+                    myBinding.tvNoDishesAddedYet.visibility = View.VISIBLE
                 }
             }
         }
