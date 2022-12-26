@@ -1,11 +1,10 @@
 package com.arajdianaltaf.favdish.viewmodel
 
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.arajdianaltaf.favdish.model.entities.FavDish
 import com.arajdianaltaf.favdish.model.entities.database.FavDishRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class FavDishViewModel(private val repository: FavDishRepository): ViewModel() {
@@ -14,6 +13,8 @@ class FavDishViewModel(private val repository: FavDishRepository): ViewModel() {
     fun insert(dish: FavDish) = viewModelScope.launch {
         repository.insertFavDishData(dish)
     }
+
+    val allDishesList: LiveData<List<FavDish>> = repository.allDishesList.asLiveData()
 
 }
 
