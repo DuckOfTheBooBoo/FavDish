@@ -52,10 +52,10 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.karumi:dexter:6.2.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    def room_version = '2.2.6'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    def room_version = '2.4.3'
     implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room_compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
