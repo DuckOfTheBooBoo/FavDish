@@ -16,6 +16,8 @@ class FavDishViewModel(private val repository: FavDishRepository): ViewModel() {
 
     val allDishesList: LiveData<List<FavDish>> = repository.allDishesList.asLiveData()
 
+    val allFavDishesList: LiveData<List<FavDish>> = repository.allFavDishesList.asLiveData()
+
 }
 
 class FavDishViewModelFactory(private val repository: FavDishRepository): ViewModelProvider.Factory{

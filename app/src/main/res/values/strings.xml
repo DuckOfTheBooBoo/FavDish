@@ -31,5 +31,6 @@
     <string name="err_msg_select_cooking_time">Please select dish cooking time.</string>
     <string name="err_msg_enter_dish_cook_instructions">Please enter cooking instructions.</string>
     <string name="lbl_no_dishes_has_added_yet">No Dishes Added Yet!!</string>
+    <string name="lbl_no_fav_dishes_has_added_yet">No Favorite Dishes Added Yet!!</string>
     <string name="image_contDesc">This is a dish image.</string>
 </resources>

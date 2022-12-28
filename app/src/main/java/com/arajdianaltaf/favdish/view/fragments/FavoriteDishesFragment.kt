@@ -6,11 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import com.arajdianaltaf.favdish.application.FavDishApplication
 import com.arajdianaltaf.favdish.databinding.FragmentFavoriteDishesBinding
+import com.arajdianaltaf.favdish.view.adapters.FavDishAdapter
 import com.arajdianaltaf.favdish.viewmodel.DashboardViewModel
+import com.arajdianaltaf.favdish.viewmodel.FavDishViewModel
+import com.arajdianaltaf.favdish.viewmodel.FavDishViewModelFactory
 
 class FavoriteDishesFragment : Fragment() {
+
+    private lateinit var myBinding: FragmentFavoriteDishesBinding
+    private val myFavDishViewModel: FavDishViewModel by viewModels {
+        FavDishViewModelFactory(
+            (
+                    requireActivity().application as FavDishApplication).repository)
+
+    }
+
 
     private var _binding: FragmentFavoriteDishesBinding? = null
 
@@ -23,17 +38,34 @@ class FavoriteDishesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+        myBinding = FragmentFavoriteDishesBinding.inflate(inflater, container, false)
 
-        _binding = FragmentFavoriteDishesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return myBinding.root
+    }
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        myBinding.rvFavDishesList.layoutManager = GridLayoutManager(requireActivity(), 2)
+
+        val favDishAdapter = FavDishAdapter(this@FavoriteDishesFragment)
+
+        myBinding.rvFavDishesList.adapter = favDishAdapter
+
+        myFavDishViewModel.allFavDishesList.observe(viewLifecycleOwner) {
+            dishes -> dishes.let {
+                if (it.isNotEmpty()) {
+
+                    myBinding.rvFavDishesList.visibility = View.VISIBLE
+                    myBinding.tvNoFavDishesAddedYet.visibility = View.GONE
+                } else {
+
+                    myBinding.rvFavDishesList.visibility = View.GONE
+                    myBinding.tvNoFavDishesAddedYet.visibility = View.VISIBLE
+                }
         }
-        return root
+        }
+
     }
 
     override fun onDestroyView() {
